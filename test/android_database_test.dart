@@ -1,8 +1,7 @@
 /* This is free and unencumbered software released into the public domain. */
 
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:flutter_android/android_database.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('android_database.DatabaseUtils', () {
@@ -41,7 +40,7 @@ void main() {
       expect(cursor.isBeforeFirst, isTrue);
       for (var row in cursor) {
         expect(row, hasLength(3));
-        expect(row.keys, contains('a'));
+        expect(row!.keys, contains('a'));
         expect(row.keys, contains('b'));
         expect(row.keys, contains('c'));
       }

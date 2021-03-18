@@ -57,13 +57,13 @@ class Parcel {
 
   final Uint8Buffer _output = Uint8Buffer();
   final ByteData _buffer = ByteData(8);
-  Uint8List _bufferAsList;
+  late Uint8List _bufferAsList;
 
   Parcel.obtain() {
     _bufferAsList = _buffer.buffer.asUint8List();
   }
 
-  void writeValue(final Object val) {
+  void writeValue(final Object? val) {
     if (val == null) {
       writeInt(VAL_NULL);
     } else if (val is String) {
@@ -115,7 +115,7 @@ class Parcel {
       writeStringArray(val);
     } else if (val is List) {
       writeInt(VAL_LIST);
-      writeList(val);
+      writeList(val as List<Object>);
     } else {
       throw ArgumentError("Parcel: unable to marshal value $val");
     }
@@ -149,7 +149,7 @@ class Parcel {
     _write(_bufferAsList, 0, 8);
   }
 
-  void writeString(final String val) {
+  void writeString(final String? val) {
     if (val == null) {
       return writeInt(-1);
     }
@@ -159,7 +159,7 @@ class Parcel {
         .asUint8List());
   }
 
-  void writeBooleanArray(final List<bool> vals) {
+  void writeBooleanArray(final List<bool>? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -167,7 +167,7 @@ class Parcel {
     vals.forEach((val) => writeBoolean(val));
   }
 
-  void writeFloatArray(final Float32List vals) {
+  void writeFloatArray(final Float32List? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -175,7 +175,7 @@ class Parcel {
     _write(vals.buffer.asUint8List(vals.offsetInBytes, 4 * vals.length));
   }
 
-  void writeDoubleArray(final Float64List vals) {
+  void writeDoubleArray(final Float64List? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -183,7 +183,7 @@ class Parcel {
     _write(vals.buffer.asUint8List(vals.offsetInBytes, 8 * vals.length));
   }
 
-  void writeByteArray(final Uint8List vals) {
+  void writeByteArray(final Uint8List? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -191,7 +191,7 @@ class Parcel {
     _write(vals);
   }
 
-  void writeCharArray(final Int16List vals) {
+  void writeCharArray(final Int16List? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -200,7 +200,7 @@ class Parcel {
     vals.forEach((val) => writeInt(val));
   }
 
-  void writeIntArray(final Int32List vals) {
+  void writeIntArray(final Int32List? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -208,7 +208,7 @@ class Parcel {
     _write(vals.buffer.asUint8List(vals.offsetInBytes, 4 * vals.length));
   }
 
-  void writeLongArray(final Int64List vals) {
+  void writeLongArray(final Int64List? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -216,7 +216,7 @@ class Parcel {
     _write(vals.buffer.asUint8List(vals.offsetInBytes, 8 * vals.length));
   }
 
-  void writeStringArray(final List<String> vals) {
+  void writeStringArray(final List<String>? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -224,7 +224,7 @@ class Parcel {
     vals.forEach((val) => writeString(val));
   }
 
-  void writeList(final List<Object> vals) {
+  void writeList(final List<Object>? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -232,7 +232,7 @@ class Parcel {
     vals.forEach((val) => writeValue(val));
   }
 
-  void writeMap(final Map<String, Object> vals) {
+  void writeMap(final Map<String, Object>? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -243,7 +243,7 @@ class Parcel {
     });
   }
 
-  void writeArrayMap(final Map<String, Object> vals) {
+  void writeArrayMap(final Map<String, Object>? vals) {
     if (vals == null) {
       return writeInt(-1);
     }
@@ -254,14 +254,15 @@ class Parcel {
     });
   }
 
-  void writeBundle(final Bundle bundle) {
+  void writeBundle(final Bundle? bundle) {
     if (bundle == null) {
       return writeInt(-1);
     }
     bundle.writeToParcel(this);
   }
 
-  void writeParcelable(final Parcelable parcelable, [int parcelableFlags = 0]) {
+  void writeParcelable(final Parcelable? parcelable,
+      [int parcelableFlags = 0]) {
     if (parcelable == null) {
       return writeString(null);
     }
@@ -269,7 +270,7 @@ class Parcel {
     parcelable.writeToParcel(this, parcelableFlags);
   }
 
-  void _write(final Uint8List data, [int start = 0, int end]) {
+  void _write(final Uint8List data, [int start = 0, int? end]) {
     _output.addAll(data, start, end);
     if (_output.lengthInBytes % 4 != 0) {
       _writePadding(4 - _output.lengthInBytes % 4);

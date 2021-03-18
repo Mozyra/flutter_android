@@ -16,8 +16,8 @@ class ActivityManager {
   /// Returns `true` if device is running in a test harness.
   ///
   /// See: https://developer.android.com/reference/android/app/ActivityManager#isRunningInTestHarness()
-  static Future<bool> get isRunningInTestHarness async {
+  static Future<bool?> get isRunningInTestHarness async {
     assert(Platform.isAndroid);
-    return await _channel.invokeMethod('isRunningInTestHarness') as bool;
+    return await _channel.invokeMethod('isRunningInTestHarness') as bool?;
   }
 }

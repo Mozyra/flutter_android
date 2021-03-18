@@ -1,6 +1,8 @@
 /* This is free and unencumbered software released into the public domain. */
 
-import 'package:flutter/foundation.dart' show required;
+import 'dart:async';
+
+import 'package:flutter/services.dart';
 
 import 'sensor_event.dart' show SensorEvent;
 import 'sensor_manager.dart' show SensorManager;
@@ -312,13 +314,13 @@ class Sensor {
   final int key;
 
   /// See: https://developer.android.com/reference/android/hardware/Sensor#getName()
-  final String name;
+  final String? name;
 
   /// See: https://developer.android.com/reference/android/hardware/Sensor#getType()
-  final int type;
+  final int? type;
 
   const Sensor({
-    @required this.key,
+    required this.key,
     this.name,
     this.type,
   });
@@ -327,10 +329,10 @@ class Sensor {
   ///
   /// See: https://developer.android.com/reference/android/hardware/SensorManager#registerListener(android.hardware.SensorEventListener,%20android.hardware.Sensor,%20int)
   Future<Stream<SensorEvent>> subscribe(
-      {int samplingPeriodUs, int maxReportLatencyUs}) async {
-    final events = await SensorManager.registerListener(this,
+      {int? samplingPeriodUs, int? maxReportLatencyUs}) async {
+    final events = await (SensorManager.registerListener(this,
         samplingPeriodUs: samplingPeriodUs,
-        maxReportLatencyUs: maxReportLatencyUs);
+        maxReportLatencyUs: maxReportLatencyUs) as FutureOr<EventChannel>);
     return events.receiveBroadcastStream().map(
         (dynamic event) => _streamEventToSensorEvent(event.cast<double>()));
   }
@@ -338,7 +340,7 @@ class Sensor {
   @override
   String toString() => '[Sensor (type: $type)]';
 
-  SensorEvent _streamEventToSensorEvent(final List<double> list) {
+  SensorEvent _streamEventToSensorEvent(final List<double>? list) {
     return SensorEvent(
       accuracy: null, // TODO
       sensor: this,

@@ -1,6 +1,6 @@
 # See: https://dart.dev/tools/pub/pubspec
 name: flutter_android
-version: 0.8.0
+version: 0.9.0-nullsafety.0
 description: >-
   A Flutter plugin for Android platform-specific APIs, to reduce duplication
   of effort by centralizing Android bindings in a single package.
@@ -11,15 +11,14 @@ documentation:
 dependencies:
   flutter:
     sdk: flutter
-  typed_data: ^1.2.0
+  typed_data: ^1.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic: ^1.9.0
+  pedantic: ^1.11.0
 dependency_overrides:
 environment:
-  sdk: ">=2.8.0 <3.0.0"
-  flutter: ">=1.17.0 <2.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 executables:
 flutter:
   plugin:

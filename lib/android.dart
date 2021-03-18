@@ -31,7 +31,7 @@ abstract class Android {
       MethodChannel('flutter_android/Android');
 
   /// Returns the Android platform version.
-  static Future<String> get platformVersion async {
+  static Future<String?/*!*/> get platformVersion async {
     assert(Platform.isAndroid);
     return await _channel.invokeMethod('getPlatformVersion');
   }
